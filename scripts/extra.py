@@ -14,12 +14,6 @@ def ConfidenceInterval(alpha, F, circuitlength, time):
     return lower_bound, upper_bound
 
 
-def boxplot():
-    # plt.boxplot()
-    ## Create boxplot
-    print("Boxplot")
-
-
 if __name__ == "__main__":
     circuitlength_EHV = 2310  # unit: km ## Q2: 2310, Q3: 2471
     circuitlength_HV = 3329  # unit: km ## Q2: 3329, Q3: 4078
