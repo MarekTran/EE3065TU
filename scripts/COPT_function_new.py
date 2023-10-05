@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+
 
 def COPT_function(Cgens, Ugens, P_round):
     # Eduardo Jerez, based on Bart Tuinema's Matlab code
@@ -34,14 +36,22 @@ df = pd.read_csv('Cgens_Ugens.csv')
 Cgens = df['Cgens'].values.tolist()
 Ugens = df['Ugens'].values.tolist()
 
-#print(COPT_function(Cgens, Ugens,2))
+df = pd.read_csv('load_Pwind.csv')
+NLh_load = df['NLh_load'].values.tolist()
+
+print("The Largest gen is: ", np.max(Cgens), 'MW \nThe smallest is: ', np.min(Cgens), "MW \n with the total being: ", np.sum(Cgens), "MW \n")
+print("The largest unavailability is: ", np.max(Ugens), '\nThe smallest is: ', np.min(Ugens), "\n ")
+print("The largest load is: ", np.max(NLh_load), "MW \n")
+
+
+print(COPT_function(Cgens, Ugens,50))
 
 def LOLP(C, L, time):
     Ctotal = np.sum(C)
     Gen = []
     p = []
     P = []
-    table = COPT_function(Cgens, Ugens, 100)
+    table = COPT_function(Cgens, Ugens, 50)
     for row in table:
         Gen.append(row[0])
         p.append(row[1])
@@ -66,7 +76,7 @@ def LOEE(C, L, time):
     Gen = []
     p = []
     P = []
-    table = COPT_function(Cgens, Ugens, 100)
+    table = COPT_function(Cgens, Ugens, 50)
     for row in table:
         Gen.append(row[0])
         p.append(row[1])
@@ -87,9 +97,9 @@ def LOEE(C, L, time):
     
 
 
-lolp =  LOLP(Cgens, [550,350],[5000,3760])
+lolp =  LOLP(Cgens, NLh_load,np.ones(len(NLh_load)))
 print("THe LOLP of this COPT is: ", lolp)
-print("THe LOLE of this COPT is: ", LOLE(lolp, [5000,3760]))
-print("THe LOEE of this COPT is: ", LOEE(Cgens, [550,350], [5000,3760]), "MW")
+print("THe LOLE of this COPT is: ", LOLE(lolp, np.ones(len(NLh_load))))
+print("THe LOEE of this COPT is: ", LOEE(Cgens, NLh_load, np.ones(len(NLh_load))), "MW")
 
         
