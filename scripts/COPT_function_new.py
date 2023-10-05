@@ -27,8 +27,12 @@ def COPT_function(Cgens, Ugens, P_round):
     COPT = np.transpose(np.vstack([np.transpose(COPT), np.subtract(1, np.hstack([[0], np.cumsum(COPT[0:-1, 1])]))]))
 
     return COPT
-Cgens =[200, 100, 200, 500]
-Ugens = [0.05, 0.03, 0.04, 0.06]
+#Cgens =[200, 100, 200, 500]
+#Ugens = [0.05, 0.03, 0.04, 0.06]
+
+df = pd.read_csv('Cgens_Ugens.csv')
+Cgens = df['Cgens'].values.tolist()
+Ugens = df['Ugens'].values.tolist()
 
 #print(COPT_function(Cgens, Ugens,2))
 
