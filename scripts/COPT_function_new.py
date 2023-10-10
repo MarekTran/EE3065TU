@@ -32,11 +32,11 @@ def COPT_function(Cgens, Ugens, P_round):
 #Cgens =[200, 100, 200, 500]
 #Ugens = [0.05, 0.03, 0.04, 0.06]
 
-df = pd.read_csv('Cgens_Ugens.csv')
+df = pd.read_csv('./data/Cgens_Ugens.csv')
 Cgens = df['Cgens'].values.tolist()
 Ugens = df['Ugens'].values.tolist()
 
-df = pd.read_csv('load_Pwind.csv')
+df = pd.read_csv('./data/load_Pwind.csv')
 NLh_load = df['NLh_load'].values.tolist()
 
 print("The Largest gen is: ", np.max(Cgens), 'MW \nThe smallest is: ', np.min(Cgens), "MW \n with the total being: ", np.sum(Cgens), "MW \n")
@@ -45,6 +45,17 @@ print("The largest load is: ", np.max(NLh_load), "MW \n")
 
 
 print(COPT_function(Cgens, Ugens,50))
+# Convert to DF and print (first column is Capacity, second is Probability third is CumProb)
+df = pd.DataFrame(COPT_function(Cgens, Ugens,50))
+df.columns = ['Capacity', 'Probability', 'CumProb']
+# Format Probability and CumProb to 4 decimal places
+df['Probability'] = df['Probability'].map('{:,.4f}'.format)
+df['CumProb'] = df['CumProb'].map('{:,.4f}'.format)
+# Drop index
+df = df.set_index('Capacity')
+# Export to csv in ./output/copt.csv
+df.to_csv('./output/copt.csv')
+print(df)
 
 def LOLP(C, L, time):
     Ctotal = np.sum(C)
