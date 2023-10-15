@@ -77,7 +77,7 @@ else:
             P_lines = get_P_lines_MVL_func(B_matrix, Y_lines, C_lines, bus_loads[i,:])   # result from the DC load flow (=line flows in MW)
             P_lines_normal[:,i] = P_lines   # circuit loadings during normal operation
             if any(abs(P_lines)>100):   # if there is an overloaded circuit
-                pint('RIP: line overloaded in normal case')   # an error message in given
+                print('RIP: line overloaded in normal case')   # an error message in given
 
 
 ## Contingency analysis: 1st-order contingencies
@@ -100,16 +100,37 @@ for j in range(12):    # for each of the 12 lines in the network
                     P_lines_max_cont[k] = max(P_lines_max_cont[k],P_lines[k])
 
 
-## Figures
+# Figures
+fig, ax1 = plt.subplots()
+
 for i in range(12):
-    plt.bar(i, P_lines_max_cont[i])
+    ax1.bar(i + 1, P_lines_max_cont[i])
 
+ax1.set_title('Maximum line loadings under 1st-order contingencies')
+ax1.set_ylabel('Relative Line Loading')
 plt.show()
 
-plt.boxplot([P_lines_normal[0], P_lines_normal[1], P_lines_normal[2], P_lines_normal[3], P_lines_normal[4], P_lines_normal[5], P_lines_normal[6], P_lines_normal[7], P_lines_normal[8], P_lines_normal[9], P_lines_normal[10], P_lines_normal[11]])
+fig2, ax2 = plt.subplots()
+ax2.boxplot(
+    [P_lines_normal[0], P_lines_normal[1], P_lines_normal[2], P_lines_normal[3], P_lines_normal[4], P_lines_normal[5],
+     P_lines_normal[6], P_lines_normal[7], P_lines_normal[8], P_lines_normal[9], P_lines_normal[10],
+     P_lines_normal[11]], '-')
 
-plt.xticks(range(12))
-plt.title('Deterministic contingency analysis 2020 MVL-region')
-
-plt.ylabel("Relative Line Loading")
+ax2.set_title('Deterministic contingency analysis 2020 MVL-region')
+ax2.set_ylabel("Relative Line Loading")
 plt.show()
+
+# ## Figures
+# for i in range(12):
+#     plt.bar(i, P_lines_max_cont[i])
+
+# plt.show()
+
+# plt.boxplot([P_lines_normal[0], P_lines_normal[1], P_lines_normal[2], P_lines_normal[3], P_lines_normal[4], P_lines_normal[5], P_lines_normal[6], P_lines_normal[7], P_lines_normal[8], P_lines_normal[9], P_lines_normal[10], P_lines_normal[11]])
+
+# plt.xticks(range(12))
+# plt.title('Deterministic contingency analysis 2020 MVL-region')
+
+# plt.ylabel("Relative Line Loading")
+# plt.show()
+
